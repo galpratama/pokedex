@@ -1,5 +1,8 @@
+import AboutView from "@/views/AboutView.vue";
+import CompareView from "@/views/CompareView.vue";
+import HomeView from "@/views/HomeView.vue";
+import PokemonView from "@/views/PokemonView.vue";
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
 
 const router = createRouter({
   scrollBehavior() {
@@ -10,22 +13,22 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      component: import("../views/HomeView.vue"),
+      component: HomeView,
     },
     {
       path: "/about",
       name: "about",
-      component: () => import("../views/AboutView.vue"),
+      component: () => AboutView,
     },
     {
       path: "/compare",
       name: "compare",
-      component: () => import("../views/CompareView.vue"),
+      component: () => CompareView,
     },
     {
-      path: "/pokemon/:name",
+      path: "/pokemon/:id",
       name: "pokemon",
-      component: () => import("../views/PokemonView.vue"),
+      component: () => PokemonView,
     },
   ],
 });
