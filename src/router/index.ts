@@ -26,7 +26,7 @@ const router = createRouter({
       component: () => CompareView,
     },
     {
-      path: "/pokemon/:id",
+      path: "/pokemon/:name",
       name: "pokemon",
       component: () => PokemonView,
     },
