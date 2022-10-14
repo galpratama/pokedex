@@ -71,7 +71,8 @@ onMounted(() => {
             class="block p-4 text-center"
             :to="`pokemon/${pokemon.name}`"
           >
-            <img
+            <el-image
+              lazy
               class="h-24 mx-auto mb-8"
               :src="`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${getPokemonId(
                 pokemon.url
