@@ -1,16 +1,18 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import { ElNotification } from "element-plus";
+
 type Pokemon = {
   name: string;
   url: string;
 };
 
 const pokemons = ref<Pokemon[]>([]);
-const offset = ref(0);
+const offset = ref<number>(0);
 
 const fetchPokemon = async ({
   offset = 0,
-  limit = 24,
+  limit = 48,
 }: {
   offset?: number;
   limit?: number;
@@ -20,11 +22,21 @@ const fetchPokemon = async ({
       `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`
     );
     const data = await response.json();
-    pokemons.value = data.results;
-    console.log(data);
+    pokemons.value = [...pokemons.value, ...data.results];
   } catch (error) {
-    console.log(error);
+    ElNotification({
+      title: "Error",
+      message: "There was an error fetching the pokemons",
+      type: "error",
+      showClose: false,
+      position: "bottom-right",
+    });
   }
+};
+
+const loadMore = () => {
+  offset.value += 12;
+  fetchPokemon({ offset: offset.value });
 };
 
 const getPokemonId = (url: string) => {
@@ -32,19 +44,24 @@ const getPokemonId = (url: string) => {
   return id;
 };
 
+const getPokemonName = (pokemon: Pokemon) => {
+  return pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
+};
+
 onMounted(() => {
   fetchPokemon({ offset: offset.value });
 });
-
-// Data
 </script>
 
 <template>
   <main class="container mx-auto my-10">
-    <el-row>
+    <el-row
+      v-loading="pokemons.length === 0"
+      v-infinite-scroll="loadMore"
+      infinite-scroll-delay="1000"
+    >
       <el-col
         v-for="(pokemon, index) in pokemons"
-        infinite-scroll-delay="1000"
         :key="index"
         :xs="8"
         :sm="6"
@@ -53,7 +70,10 @@ onMounted(() => {
         :xl="1"
       >
         <el-card class="m-2 rounded-xl">
-          <div class="p-4 text-center">
+          <RouterLink
+            class="block p-4 text-center"
+            :to="`pokemon/${pokemon.name}`"
+          >
             <img
               class="h-24 mx-auto mb-8"
               :src="`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${getPokemonId(
@@ -61,8 +81,8 @@ onMounted(() => {
               )}.svg`"
               :alt="pokemon.name"
             />
-            <span>{{ pokemon.name }}</span>
-          </div>
+            <span>{{ getPokemonName(pokemon) }}</span>
+          </RouterLink>
         </el-card>
       </el-col>
     </el-row>
