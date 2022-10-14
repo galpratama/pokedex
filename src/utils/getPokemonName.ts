@@ -1,6 +1,5 @@
 type Pokemon = {
   name: string;
-  url: string;
 };
 
 const getPokemonName = (pokemon: Pokemon) => {
