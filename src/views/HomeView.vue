@@ -12,7 +12,7 @@ const offset = ref<number>(0);
 
 const fetchPokemon = async ({
   offset = 0,
-  limit = 48,
+  limit = 8,
 }: {
   offset?: number;
   limit?: number;
@@ -35,7 +35,7 @@ const fetchPokemon = async ({
 };
 
 const loadMore = () => {
-  offset.value += 12;
+  offset.value += 8;
   fetchPokemon({ offset: offset.value });
 };
 
@@ -58,7 +58,7 @@ onMounted(() => {
     <el-row
       v-loading="pokemons.length === 0"
       v-infinite-scroll="loadMore"
-      infinite-scroll-delay="1000"
+      infinite-scroll-delay="100"
     >
       <el-col
         v-for="(pokemon, index) in pokemons"
