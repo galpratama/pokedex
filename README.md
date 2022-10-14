@@ -1,6 +1,6 @@
-# pokedex
+# Pokedex
 
-This template should help get you started developing with Vue 3 in Vite.
+This is a simple pokedex app that uses the [PokeAPI](https://pokeapi.co/) to fetch data about pokemon.
 
 ## Recommended IDE Setup
 
