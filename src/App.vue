@@ -10,7 +10,7 @@ const handleSelect = (key: string, keyPath: string[]) => {
 <template>
   <el-menu
     :default-active="activeIndex"
-    class="el-menu-demo"
+    class="sticky top-0 left-0 z-10 w-full el-menu-demo"
     mode="horizontal"
     :ellipsis="false"
     @select="handleSelect"
