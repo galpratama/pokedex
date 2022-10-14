@@ -2,6 +2,9 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 
 const router = createRouter({
+  scrollBehavior() {
+    return { top: 0 };
+  },
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
@@ -20,11 +23,10 @@ const router = createRouter({
       component: () => import("../views/CompareView.vue"),
     },
     {
-      path: "/pokemon/:id",
+      path: "/pokemon/:name",
       name: "pokemon",
       component: () => import("../views/PokemonView.vue"),
     },
-    
   ],
 });
 

@@ -2,6 +2,7 @@
 import { onMounted, ref } from "vue";
 import { ElNotification } from "element-plus";
 import getPokemonName from "@/utils/getPokemonName";
+import axios from "axios";
 
 type Pokemon = {
   name: string;
@@ -19,10 +20,10 @@ const fetchPokemons = async ({
   limit?: number;
 }) => {
   try {
-    const response = await fetch(
+    const response = await axios.get(
       `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`
     );
-    const data = await response.json();
+    const data = await response.data;
     pokemons.value = [...pokemons.value, ...data.results];
   } catch (error) {
     ElNotification({
