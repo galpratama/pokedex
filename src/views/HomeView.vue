@@ -76,9 +76,9 @@ onMounted(() => {
           >
             <img
               class="h-24 mx-auto mb-8"
-              :src="`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${getPokemonId(
+              :src="`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${getPokemonId(
                 pokemon.url
-              )}.svg`"
+              )}.png`"
               :alt="pokemon.name"
             />
             <span>{{ getPokemonName(pokemon) }}</span>
