@@ -18,17 +18,17 @@ const router = createRouter({
     {
       path: "/about",
       name: "about",
-      component: () => AboutView,
+      component: AboutView,
     },
     {
       path: "/compare",
       name: "compare",
-      component: () => CompareView,
+      component: CompareView,
     },
     {
       path: "/pokemon/:name",
-      name: "pokemon",
-      component: () => PokemonView,
+      name: "detail",
+      component: PokemonView,
     },
   ],
 });
