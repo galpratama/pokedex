@@ -25,6 +25,9 @@ const handleSelect = (key: string, keyPath: string[]) => {
       <RouterLink to="/">Home</RouterLink>
     </el-menu-item>
     <el-menu-item index="2">
+      <RouterLink to="/compare">Compare</RouterLink>
+    </el-menu-item>
+    <el-menu-item index="3">
       <RouterLink to="/about">About</RouterLink>
     </el-menu-item>
   </el-menu>
