@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { ElNotification } from "element-plus";
+import getPokemonName from "@/utils/getPokemonName";
 
 type Pokemon = {
   name: string;
@@ -10,7 +11,7 @@ type Pokemon = {
 const pokemons = ref<Pokemon[]>([]);
 const offset = ref<number>(0);
 
-const fetchPokemon = async ({
+const fetchPokemons = async ({
   offset = 0,
   limit = 8,
 }: {
@@ -36,7 +37,7 @@ const fetchPokemon = async ({
 
 const loadMore = () => {
   offset.value += 8;
-  fetchPokemon({ offset: offset.value });
+  fetchPokemons({ offset: offset.value });
 };
 
 const getPokemonId = (url: string) => {
@@ -44,12 +45,8 @@ const getPokemonId = (url: string) => {
   return id;
 };
 
-const getPokemonName = (pokemon: Pokemon) => {
-  return pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
-};
-
 onMounted(() => {
-  fetchPokemon({ offset: offset.value });
+  fetchPokemons({ offset: offset.value });
 });
 </script>
 
