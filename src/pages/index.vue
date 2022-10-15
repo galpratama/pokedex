@@ -58,15 +58,17 @@ const checkedTypes = ref([
   "fairy",
 ]);
 const checkAllTypes = ref(false);
-const isTypesIndeterminate = ref(true);
+const isTypesIndeterminate = ref(false);
 const handleCheckAllTypesChange = (value: boolean) => {
   checkedTypes.value = value ? types.value : [];
   isTypesIndeterminate.value = false;
+  applyFilter();
 };
 const handleCheckedTypesChange = (value: string[]) => {
   checkedTypes.value = value;
   isTypesIndeterminate.value =
     value.length > 0 && value.length < types.value.length;
+  applyFilter();
 };
 
 // Generation
@@ -81,15 +83,17 @@ const checkedGeneration = ref([
   "generation-viii",
 ]);
 const checkAllGeneration = ref(false);
-const isGenerationIndeterminate = ref(true);
+const isGenerationIndeterminate = ref(false);
 const handleCheckAllGenerationChange = (value: boolean) => {
   checkedGeneration.value = value ? generation.value : [];
   isGenerationIndeterminate.value = false;
+  applyFilter();
 };
 const handleCheckedGenerationChange = (value: string[]) => {
   checkedGeneration.value = value;
   isGenerationIndeterminate.value =
     value.length > 0 && value.length < generation.value.length;
+  applyFilter();
 };
 
 const { result, loading, fetchMore, refetch } = useQuery(
@@ -158,51 +162,53 @@ const applyFilter = async () => {
 
 <template>
   <main class="container mx-auto my-10">
-    <div class="mb-2">
-      <h2 class="text-xl">Filter by Type</h2>
-      <el-checkbox
-        v-model="checkAllTypes"
-        :indeterminate="isTypesIndeterminate"
-        @change="handleCheckAllTypesChange"
-        >Check all</el-checkbox
-      >
-      <el-checkbox-group
-        :min="1"
-        v-model="checkedTypes"
-        @change="handleCheckedTypesChange"
-      >
+    <div class="grid grid-cols-2 gap-2 mb-2">
+      <div class="p-4 border rounded-lg">
+        <h2 class="pb-3 mb-2 text-xl border-b">Filter by Type</h2>
         <el-checkbox
-          v-for="pokeType in types"
-          :key="pokeType"
-          :label="pokeType"
-          >{{ pokeType.toUpperCase() }}</el-checkbox
+          class="font-bold"
+          v-model="checkAllTypes"
+          :indeterminate="isTypesIndeterminate"
+          @change="handleCheckAllTypesChange"
+          >Check all</el-checkbox
         >
-      </el-checkbox-group>
-    </div>
+        <el-checkbox-group
+          :min="1"
+          v-model="checkedTypes"
+          @change="handleCheckedTypesChange"
+        >
+          <el-checkbox
+            v-for="pokeType in types"
+            :key="pokeType"
+            :label="pokeType"
+            >{{ pokeType.toUpperCase() }}</el-checkbox
+          >
+        </el-checkbox-group>
+      </div>
 
-    <div class="mb-2">
-      <h2 class="text-xl">Filter by Generation</h2>
-      <el-checkbox
-        v-model="checkAllGeneration"
-        :indeterminate="isGenerationIndeterminate"
-        @change="handleCheckAllGenerationChange"
-        >Check all</el-checkbox
-      >
-      <el-checkbox-group
-        :min="1"
-        v-model="checkedGeneration"
-        @change="handleCheckedGenerationChange"
-      >
+      <div class="p-4 border rounded-lg">
+        <h2 class="pb-3 mb-2 text-xl border-b">Filter by Generation</h2>
         <el-checkbox
-          v-for="pokeGeneration in generation"
-          :key="pokeGeneration"
-          :label="pokeGeneration"
-          >{{ pokeGeneration.toUpperCase() }}</el-checkbox
+          class="font-bold"
+          v-model="checkAllGeneration"
+          :indeterminate="isGenerationIndeterminate"
+          @change="handleCheckAllGenerationChange"
+          >Check all</el-checkbox
         >
-      </el-checkbox-group>
+        <el-checkbox-group
+          :min="1"
+          v-model="checkedGeneration"
+          @change="handleCheckedGenerationChange"
+        >
+          <el-checkbox
+            v-for="pokeGeneration in generation"
+            :key="pokeGeneration"
+            :label="pokeGeneration"
+            >{{ pokeGeneration.toUpperCase() }}</el-checkbox
+          >
+        </el-checkbox-group>
+      </div>
     </div>
-    <el-button @click="applyFilter" plain type="primary" class="mb-8">Submit</el-button>
-
     <el-row
       v-loading="loading"
       v-infinite-scroll="loadMore"
