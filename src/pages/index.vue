@@ -5,14 +5,52 @@ import { useQuery } from "@vue/apollo-composable";
 import gql from "graphql-tag";
 
 const offset = ref(0);
+const type = ref([
+  "normal",
+  "fire",
+  "water",
+  "electric",
+  "grass",
+  "ice",
+  "fighting",
+  "poison",
+  "ground",
+  "flying",
+  "psychic",
+  "bug",
+  "rock",
+  "ghost",
+  "dragon",
+  "dark",
+  "steel",
+  "fairy",
+]);
+const generation = ref([
+  "generation-i",
+  "generation-ii",
+  "generation-iii",
+  "generation-iv",
+  "generation-v",
+  "generation-vi",
+  "generation-vii",
+  "generation-viii",
+]);
 
 const { result, loading, fetchMore } = useQuery(
   gql`
-    query getPokemons($offset: Int!) {
+    query getPokemons($offset: Int!, $type: [String], $generation: [String]) {
       species: pokemon_v2_pokemonspecies(
         limit: 24
         offset: $offset
         order_by: { id: asc }
+        where: {
+          pokemon_v2_pokemons: {
+            pokemon_v2_pokemontypes: {
+              pokemon_v2_type: { name: { _in: $type } }
+            }
+          }
+          pokemon_v2_generation: { name: { _in: $generation } }
+        }
       ) {
         id
         name
@@ -29,6 +67,8 @@ const { result, loading, fetchMore } = useQuery(
   `,
   {
     offset: offset.value,
+    type: type.value,
+    generation: generation.value,
   },
   {
     fetchPolicy: "cache-first",
