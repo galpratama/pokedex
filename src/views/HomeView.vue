@@ -1,60 +1,64 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import { ElNotification } from "element-plus";
+import { ref, computed } from "vue";
 import getPokemonName from "@/utils/getPokemonName";
-import axios from "axios";
+import { useQuery } from "@vue/apollo-composable";
+import gql from "graphql-tag";
 
-type Pokemon = {
-  name: string;
-  url: string;
-};
+const offset = ref(0);
 
-const pokemons = ref<Pokemon[]>([]);
-const offset = ref<number>(0);
-
-const fetchPokemons = async ({
-  offset = 0,
-  limit = 8,
-}: {
-  offset?: number;
-  limit?: number;
-}) => {
-  try {
-    const response = await axios.get(
-      `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`
-    );
-    const data = await response.data;
-    pokemons.value = [...pokemons.value, ...data.results];
-  } catch (error) {
-    ElNotification({
-      title: "Error",
-      message: "There was an error fetching the pokemons",
-      type: "error",
-      showClose: false,
-      position: "bottom-right",
-    });
+const { result, loading, fetchMore } = useQuery(
+  gql`
+    query getPokemons($offset: Int!) {
+      species: pokemon_v2_pokemonspecies(
+        limit: 24
+        offset: $offset
+        order_by: { id: asc }
+      ) {
+        id
+        name
+        pokemons: pokemon_v2_pokemons {
+          id
+          types: pokemon_v2_pokemontypes {
+            type: pokemon_v2_type {
+              name
+            }
+          }
+        }
+      }
+    }
+  `,
+  {
+    offset: offset.value,
+  },
+  {
+    fetchPolicy: "cache-first",
+    pollInterval: 5000,
   }
-};
+);
 
-const loadMore = () => {
-  offset.value += 8;
-  fetchPokemons({ offset: offset.value });
-};
+const pokemons = computed(() => result.value?.species ?? []);
 
-const getPokemonId = (url: string) => {
-  const id = url.split("/")[6];
-  return id;
+const loadMore = async () => {
+  offset.value += 24;
+  fetchMore({
+    variables: {
+      offset: offset.value,
+    },
+    updateQuery: (previousResult, { fetchMoreResult }) => {
+      if (!fetchMoreResult) return previousResult;
+      return {
+        ...previousResult,
+        species: [...previousResult.species, ...fetchMoreResult.species],
+      };
+    },
+  });
 };
-
-onMounted(() => {
-  fetchPokemons({ offset: offset.value });
-});
 </script>
 
 <template>
   <main class="container mx-auto my-10">
     <el-row
-      v-loading="pokemons.length === 0"
+      v-loading="loading"
       v-infinite-scroll="loadMore"
       infinite-scroll-delay="100"
     >
@@ -75,9 +79,7 @@ onMounted(() => {
             <el-image
               lazy
               class="h-24 mx-auto mb-8"
-              :src="`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${getPokemonId(
-                pokemon.url
-              )}.png`"
+              :src="`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`"
               :alt="pokemon.name"
             />
             <span>{{ getPokemonName(pokemon) }}</span>
