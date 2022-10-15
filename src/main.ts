@@ -19,7 +19,20 @@ import "./assets/main.css";
 const httpLink = createHttpLink({
   uri: "https://beta.pokeapi.co/graphql/v1beta",
 });
-const cache = new InMemoryCache();
+const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        pokemon_v2_pokemonspecies: {
+          keyArgs: false,
+          merge(existing, incoming) {
+            return incoming;
+          },
+        },
+      },
+    },
+  },
+});
 const apolloClient = new ApolloClient({
   link: httpLink,
   cache,

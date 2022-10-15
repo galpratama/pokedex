@@ -2,9 +2,6 @@
 import { ref } from "vue";
 
 const activeIndex = ref("1");
-const handleSelect = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath);
-};
 </script>
 
 <template>
@@ -13,7 +10,6 @@ const handleSelect = (key: string, keyPath: string[]) => {
     class="sticky top-0 left-0 z-10 w-full el-menu-demo"
     mode="horizontal"
     :ellipsis="false"
-    @select="handleSelect"
   >
     <el-menu-item index="0">
       <RouterLink to="/">
