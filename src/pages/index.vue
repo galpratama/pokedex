@@ -221,7 +221,6 @@ const applyFilter = async () => {
         :sm="6"
         :md="4"
         :lg="3"
-        :xl="1"
       >
         <el-card class="m-2 rounded-xl">
           <RouterLink
