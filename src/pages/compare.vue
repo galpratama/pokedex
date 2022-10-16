@@ -4,6 +4,7 @@ import { ElNotification } from "element-plus";
 import { ref, onMounted } from "vue";
 import getPokemonName from "@/utils/getPokemonName";
 import getPokemonId from "@/utils/getPokemonId";
+import { Delete } from "@element-plus/icons-vue";
 
 interface Pokemon {
   name: string;
@@ -143,6 +144,15 @@ onMounted(async () => {
               </tbody>
             </table>
           </section>
+          <div class="flex justify-end mt-10">
+            <el-button
+              plain
+              type="danger"
+              @click="comparedPokemons.splice(index, 1)"
+              :icon="Delete"
+              circle
+            />
+          </div>
         </div>
       </div>
     </div>
