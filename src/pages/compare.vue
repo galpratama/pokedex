@@ -78,7 +78,10 @@ onMounted(async () => {
     >
       <div class="mb-2">
         <h1 class="text-2xl">Compare Pokémon</h1>
-        <p>You can compare Pokémon here.</p>
+        <p>
+          You can compare Pokémon here. Start adding pokemon by searching in the
+          search box
+        </p>
       </div>
       <div class="md:ml-auto">
         <el-autocomplete
@@ -86,7 +89,8 @@ onMounted(async () => {
           :fetch-suggestions="querySearch"
           clearable
           class="inline-input w-96"
-          placeholder="Please Input"
+          placeholder="Search pokémon here..."
+          autofocus
           @select="fetchPokemon"
         >
           <template #default="{ item }">

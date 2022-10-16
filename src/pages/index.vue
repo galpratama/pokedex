@@ -133,7 +133,7 @@ const refresh = async () => {
 
 <template>
   <main class="container mx-auto my-10">
-    <div class="grid grid-cols-2 gap-2 mb-2">
+    <div class="grid grid-cols-1 gap-2 mx-2 mb-2 sm:grid-cols-2 sm:md-0">
       <div class="p-4 border rounded-lg">
         <h2 class="pb-3 mb-2 text-xl border-b">Filter by Type</h2>
         <el-checkbox
@@ -188,7 +188,7 @@ const refresh = async () => {
       <el-col
         v-for="(pokemon, index) in pokemons"
         :key="index"
-        :xs="8"
+        :xs="12"
         :sm="6"
         :md="4"
         :lg="3"
