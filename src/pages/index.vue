@@ -4,40 +4,8 @@ import getPokemonName from "@/utils/getPokemonName";
 import { useQuery } from "@vue/apollo-composable";
 import gql from "graphql-tag";
 
-const offset = ref(0);
-const types = ref([
-  "normal",
-  "fire",
-  "water",
-  "electric",
-  "grass",
-  "ice",
-  "fighting",
-  "poison",
-  "ground",
-  "flying",
-  "psychic",
-  "bug",
-  "rock",
-  "ghost",
-  "dragon",
-  "dark",
-  "steel",
-  "fairy",
-]);
-const generation = ref([
-  "generation-i",
-  "generation-ii",
-  "generation-iii",
-  "generation-iv",
-  "generation-v",
-  "generation-vi",
-  "generation-vii",
-  "generation-viii",
-]);
-
 // Types
-const checkedTypes = ref([
+const types = ref<string[]>([
   "normal",
   "fire",
   "water",
@@ -57,22 +25,23 @@ const checkedTypes = ref([
   "steel",
   "fairy",
 ]);
-const checkAllTypes = ref(false);
-const isTypesIndeterminate = ref(false);
+const checkedTypes = ref<string[]>(types.value);
+const checkAllTypes = ref<boolean>(false);
+const isTypesIndeterminate = ref<boolean>(false);
 const handleCheckAllTypesChange = (value: boolean) => {
   checkedTypes.value = value ? types.value : [];
   isTypesIndeterminate.value = false;
-  applyFilter();
+  refresh();
 };
 const handleCheckedTypesChange = (value: string[]) => {
   checkedTypes.value = value;
   isTypesIndeterminate.value =
     value.length > 0 && value.length < types.value.length;
-  applyFilter();
+  refresh();
 };
 
 // Generation
-const checkedGeneration = ref([
+const generation = ref<string[]>([
   "generation-i",
   "generation-ii",
   "generation-iii",
@@ -82,20 +51,24 @@ const checkedGeneration = ref([
   "generation-vii",
   "generation-viii",
 ]);
-const checkAllGeneration = ref(false);
-const isGenerationIndeterminate = ref(false);
+const checkedGeneration = ref<string[]>(generation.value);
+const checkAllGeneration = ref<boolean>(false);
+const isGenerationIndeterminate = ref<boolean>(false);
 const handleCheckAllGenerationChange = (value: boolean) => {
   checkedGeneration.value = value ? generation.value : [];
   isGenerationIndeterminate.value = false;
-  applyFilter();
+  refresh();
 };
 const handleCheckedGenerationChange = (value: string[]) => {
   checkedGeneration.value = value;
   isGenerationIndeterminate.value =
     value.length > 0 && value.length < generation.value.length;
-  applyFilter();
+  refresh();
 };
 
+// Pokemon
+const pokemons = computed(() => result.value?.species ?? []);
+const offset = ref<number>(0);
 const { result, loading, fetchMore, refetch } = useQuery(
   gql`
     query getPokemons($offset: Int!, $type: [String], $generation: [String]) {
@@ -132,8 +105,6 @@ const { result, loading, fetchMore, refetch } = useQuery(
   }
 );
 
-const pokemons = computed(() => result.value?.species ?? []);
-
 const loadMore = async () => {
   offset.value += 24;
   fetchMore({
@@ -150,7 +121,7 @@ const loadMore = async () => {
   });
 };
 
-const applyFilter = async () => {
+const refresh = async () => {
   offset.value = 0;
   refetch({
     offset: offset.value,
