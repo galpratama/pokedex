@@ -73,12 +73,14 @@ onMounted(async () => {
 
 <template>
   <main>
-    <div class="container flex mx-auto my-10">
-      <div>
+    <div
+      class="container grid grid-cols-1 mx-10 my-10 md:mx-auto md:grid-cols-2"
+    >
+      <div class="mb-2">
         <h1 class="text-2xl">Compare Pokémon</h1>
         <p>You can compare Pokémon here.</p>
       </div>
-      <div class="ml-auto">
+      <div class="md:ml-auto">
         <el-autocomplete
           v-model="selectedPokemon"
           :fetch-suggestions="querySearch"
@@ -106,7 +108,11 @@ onMounted(async () => {
     <div
       class="container grid grid-cols-1 gap-5 mx-auto my-10 overflow-x-scroll sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
     >
-      <div v-for="(pokemon, index) in comparedPokemons" :key="index" class="mx-10 sm:mx-0">
+      <div
+        v-for="(pokemon, index) in comparedPokemons"
+        :key="index"
+        class="mx-10 sm:mx-0"
+      >
         <div class="mr-2 md:mr-10">
           <img
             :src="pokemon.sprites.front_default"
