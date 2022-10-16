@@ -106,7 +106,7 @@ onMounted(async () => {
     <div
       class="container grid grid-cols-1 gap-5 mx-auto my-10 overflow-x-scroll sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
     >
-      <div v-for="(pokemon, index) in comparedPokemons" :key="index">
+      <div v-for="(pokemon, index) in comparedPokemons" :key="index" class="mx-10 sm:mx-0">
         <div class="mr-2 md:mr-10">
           <img
             :src="pokemon.sprites.front_default"
